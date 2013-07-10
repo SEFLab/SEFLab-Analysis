@@ -25,10 +25,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Package Structure
 =================
 
-The tools for analyzing experimental data from the SEFLab are implemented in an R package called
-'seflab.tools.analysis'.
+The tools for analyzing experimental data from the SEFLab are implemented in an
+R package called 'seflab.tools.analysis'.
 
-This package defines several data sources that encapsulate all the data processing activities needed to
-read data files and produce time-aligned and consolidated data tables.
+This package defines several data sources that encapsulate all the data
+processing activities needed to read data files and produce time-aligned and
+consolidated data tables.
 
 For more information see the documentation of the R package.
