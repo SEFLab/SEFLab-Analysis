@@ -1,0 +1,20 @@
+Package: seflab.tools.analyses
+Type: Package
+Title: Toolkit for analysing experimental data generated in the SEFLab
+Version: 1.1
+Date: 2013-03-19
+Author: Miguel Ferreira
+Maintainer: <miguelferreira@me.com>
+Description: This toolkit contains a set of tools to import data from several data sources, process it, align data streams, plot, etc.
+License: GPLv3
+LazyData: yes
+Depends:R(>= 2.14), ggplot2(>= 0.9)
+Collate:
+  'linux-performance.R'
+	'data-source.R'
+	'data-source-seflab.R'
+	'data-source-wattsup.R'
+	'data-source-joulemeter.R'
+	'data-source-linuxproc.R'
+	'analyses.R'
+  'experiment.R'
