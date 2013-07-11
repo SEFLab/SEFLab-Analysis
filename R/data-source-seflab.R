@@ -349,10 +349,9 @@ calculate.work.period <- function(data, pulse.threshold) {
   start <- NULL
   mark.work.period <- FALSE
   for(i in 1:nr.data.points) {
-    cat(".")
-    #     if(i %% 1000 == 0) {
-    #       cat("DEBUG: Progress = ", i / nr.data.points * 100, "%\n", sep="")
-    #     }
+    if(i %% 1000 == 0) {
+      cat("Progress = ", i / nr.data.points * 100, "%\n", sep="")
+    }
     row.discrete.pulse <- if(data$RAW.PULSE[i] < pulse.threshold) 0 else 1
     discrete.pulse <- c(discrete.pulse, row.discrete.pulse)
     row <- data[i,]
@@ -411,10 +410,9 @@ calculate.power.per.second.dell.server <- function(data) {
   s <- NULL
   nr.data.points <- nrow(data)
   for(idx in 1:nr.data.points) {
-    cat(".")
-#     if(idx %% 1000 == 0) {
-#       cat("DEBUG: Progress = ", idx / nr.data.points * 100, "%\n", sep="")
-#     }
+    if(idx %% 1000 == 0) {
+      cat("Progress = ", idx / nr.data.points * 100, "%\n", sep="")
+    }
     
     row <- data[idx,]
     time <- as.POSIXlt(row$TIME)
@@ -490,10 +488,9 @@ calculate.power.per.second.sun.server <- function(data) {
   s <- NULL
   nr.data.points <- nrow(data)
   for(idx in 1:nr.data.points) {
-    cat(".")
-#     if(idx %% 1000 == 0) {
-#       cat("DEBUG: Progress = ", idx / nr.data.points * 100, "%\n", sep="")
-#     }
+    if(idx %% 1000 == 0) {
+      cat("Progress = ", idx / nr.data.points * 100, "%\n", sep="")
+    }
     
     row <- data[idx,]
     time <- as.POSIXlt(row$TIME)
