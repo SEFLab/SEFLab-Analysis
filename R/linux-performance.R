@@ -78,7 +78,7 @@ aggregate.cpu.ticks <- function(cpu.ticks, timestamp, cpu.ticks.previous, cpu.ti
 }
 
 aggregate.proc.ticks <- function(proc.ticks, timestamp, proc.ticks.previous, proc.ticks.for.timestamp) {
-  tmp.proc.ticks <- data.frame()
+  timestamps <- pids <- ticks.previous <- ticks.current <- c()
   for(pid in proc.ticks.for.timestamp$pid) {
     pid.ticks.for.timestamp <- proc.ticks.for.timestamp[proc.ticks.for.timestamp$pid == pid,]
     pid.ticks.previous <- NA
@@ -88,13 +88,16 @@ aggregate.proc.ticks <- function(proc.ticks, timestamp, proc.ticks.previous, pro
     #     cat("DEBUG: timestamp = ", capture.output(timestamp), 
     #         " pid.ticks.previous = ", pid.ticks.previous, 
     #         " pid.ticks.current = ", pid.ticks.for.timestamp[1, "ticks"] ,"\n")
-    tmp.proc.ticks <- rbind(tmp.proc.ticks,
-                            data.frame(timestamp = timestamp,
-                                       pid = pid,
-                                       ticks.previous = pid.ticks.previous,
-                                       ticks.current = pid.ticks.for.timestamp[1, "ticks"]))
+    timestamps <- c(timestamps, as.character(timestamp))
+    pids <- c(pids, pid)
+    ticks.previous <- c(ticks.previous, pid.ticks.previous)
+    ticks.current <- c(ticks.current, pid.ticks.for.timestamp[1, "ticks"])
   }
-  return(rbind(proc.ticks, tmp.proc.ticks))
+  
+  return(rbind(proc.ticks, data.frame(timestamp = as.POSIXct(timestamps),
+                                      pid = pids,
+                                      ticks.previous = ticks.previous,
+                                      ticks.current = ticks.current)))
 }
 
 # this could be a lot faster if instead of growing a data frame it would grow independent vectors
