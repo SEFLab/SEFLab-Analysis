@@ -2,7 +2,7 @@
 
 
 get.timestamps.from.perfomance.files <- function(directory) {
-  files <- list.files(path=directory, include.dirs=FALSE, no..=TRUE)
+  files <- list.files(path=directory, include.dirs=FALSE)
   timestamps <- sub(pattern="(_[0-9]+_[0-9]+_[a-zA-Z(|]+)?_stat$", replacement="", x=files)
   timestamps <- as.POSIXct(x=timestamps, format="%Y%m%d_%H%M%S", tz="CET")
   timestamps <- unique(timestamps)
@@ -111,10 +111,9 @@ parse.stat.files <- function(directory) {
   timestamps <- get.timestamps.from.perfomance.files(directory)
   timestamps.count <- length(timestamps)
   for(index in 1:timestamps.count) {
-    cat(".")
-#     if(index %% 500 == 0) {
-#       cat((index / timestamps.count * 100), "%\n")
-#     }
+    if(index %% 1000 == 0) {
+      cat("Progress = ", (index / timestamps.count * 100), "%\n", sep="")
+    }
     
     timestamp <- timestamps[index]
     #     cat("DEBUG: directory = ", directory, "timestamp = ", capture.output(timestamp), "\n")
@@ -132,7 +131,6 @@ parse.stat.files <- function(directory) {
                                        proc.ticks.previous, proc.ticks.for.timestamp)
     proc.ticks.previous <- proc.ticks.for.timestamp
   }
-  cat("!\n")
   
   return(list(cpu.ticks, proc.ticks))
 }
@@ -175,17 +173,15 @@ aggregate.proc.utilizations <- function(proc.utilization) {
   timestamps <- unique(proc.utilization$timestamp)
   timestamps.count <- length(timestamps)
   for(index in 1:timestamps.count) {
-    cat(".")
-#     if(index %% 500 == 0) {
-#       cat((index / timestamps.count * 100), "%\n")
-#     }
+     if(index %% 1000 == 0) {
+       cat("Progress = ", (index / timestamps.count * 100), "%\n", sep="")
+     }
     
     timestamp <- timestamps[index]
     proc.utilization.for.timestamp <- proc.utilization[proc.utilization$timestamp == timestamp, ]
     aggregate.utilization.for.timestamp <- sum(proc.utilization.for.timestamp$percentage, na.rm=TRUE)
     aggregated.utilization <- c(aggregated.utilization, aggregate.utilization.for.timestamp)
   }
-  cat("!\n")
   
   return(data.frame(timestamp = timestamps, percentage = aggregated.utilization))
 }
