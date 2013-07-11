@@ -108,9 +108,10 @@ parse.stat.files <- function(directory) {
   timestamps <- get.timestamps.from.perfomance.files(directory)
   timestamps.count <- length(timestamps)
   for(index in 1:timestamps.count) {
-    if(index %% 500 == 0) {
-      cat((index / timestamps.count * 100), "%\n")
-    }
+    cat(".")
+#     if(index %% 500 == 0) {
+#       cat((index / timestamps.count * 100), "%\n")
+#     }
     
     timestamp <- timestamps[index]
     #     cat("DEBUG: directory = ", directory, "timestamp = ", capture.output(timestamp), "\n")
@@ -128,6 +129,7 @@ parse.stat.files <- function(directory) {
                                        proc.ticks.previous, proc.ticks.for.timestamp)
     proc.ticks.previous <- proc.ticks.for.timestamp
   }
+  cat("!\n")
   
   return(list(cpu.ticks, proc.ticks))
 }
@@ -170,15 +172,17 @@ aggregate.proc.utilizations <- function(proc.utilization) {
   timestamps <- unique(proc.utilization$timestamp)
   timestamps.count <- length(timestamps)
   for(index in 1:timestamps.count) {
-    if(index %% 500 == 0) {
-      cat((index / timestamps.count * 100), "%\n")
-    }
+    cat(".")
+#     if(index %% 500 == 0) {
+#       cat((index / timestamps.count * 100), "%\n")
+#     }
     
     timestamp <- timestamps[index]
     proc.utilization.for.timestamp <- proc.utilization[proc.utilization$timestamp == timestamp, ]
     aggregate.utilization.for.timestamp <- sum(proc.utilization.for.timestamp$percentage, na.rm=TRUE)
     aggregated.utilization <- c(aggregated.utilization, aggregate.utilization.for.timestamp)
   }
+  cat("!\n")
   
   return(data.frame(timestamp = timestamps, percentage = aggregated.utilization))
 }
