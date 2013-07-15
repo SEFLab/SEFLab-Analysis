@@ -125,11 +125,17 @@ parse.stat.files <- function(directory) {
     cpu.ticks.previous <- cpu.ticks.for.timestamp
     
     proc.stat.files <- get.proc.stat.files(files.for.timestamp)
-    #     cat("DEBUG: files.for.timestamp = ", files.for.timestamp," proc.stat.files = ", proc.stat.files, "\n")
-    proc.ticks.for.timestamp <- parse.proc.stat.files(paste(directory, "/", proc.stat.files, sep=""))
-    proc.ticks <- aggregate.proc.ticks(proc.ticks, timestamp, 
-                                       proc.ticks.previous, proc.ticks.for.timestamp)
-    proc.ticks.previous <- proc.ticks.for.timestamp
+    if(length(proc.stat.files) > 0) { 
+      #     cat("DEBUG: files.for.timestamp = ", files.for.timestamp," proc.stat.files = ", proc.stat.files, "\n")
+      proc.ticks.for.timestamp <- parse.proc.stat.files(paste(directory, "/", proc.stat.files, sep=""))
+      proc.ticks <- aggregate.proc.ticks(proc.ticks, timestamp, 
+                                         proc.ticks.previous, proc.ticks.for.timestamp)
+      proc.ticks.previous <- proc.ticks.for.timestamp
+    } else {
+      proc.ticks <- aggregate.proc.ticks(proc.ticks, timestamp, 
+                                         proc.ticks.previous, data.frame(pid = NA, ticks = NA))
+      proc.ticks.previous <- data.frame(pid = NA, ticks = NA)
+    }
   }
   
   return(list(cpu.ticks, proc.ticks))
@@ -163,7 +169,7 @@ calculate.proc.utilization <- function(combined.ticks) {
   proc.ticks.delta <- combined.ticks$proc.ticks.current - combined.ticks$proc.ticks.previous
   combined.ticks$percentage <- (proc.ticks.delta / cpu.total.ticks.delta) * 100
   
-  proc.utilization <- combined.ticks[, -c(3:4, 6:9)]
+  proc.utilization <- combined.ticks[, -c(3:8)]
   
   return(proc.utilization)
 }
@@ -202,7 +208,7 @@ parse.stat.files.and.calculate.utilizations <- function(directory, save.director
   proc.utilization <- calculate.proc.utilization(combined.ticks)
   cat("Process utilizations calulated\n", sep="")
   
-  cat("Aggregating sub-process utlizations to main process...\n")
+  cat("Aggregating sub-process utlizations ...\n")
   aggregated.proc.utilizations <- aggregate.proc.utilizations(proc.utilization)
   
   save(file=paste(save.directory, "/utilization-data.RData", sep=""), 
