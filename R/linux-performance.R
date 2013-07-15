@@ -114,27 +114,30 @@ parse.stat.files <- function(directory) {
     if(index %% 1000 == 0) {
       cat("Progress = ", (index / timestamps.count * 100), "%\n", sep="")
     }
+#     cat("index = ", index, "\n")
     
     timestamp <- timestamps[index]
     #     cat("DEBUG: directory = ", directory, "timestamp = ", capture.output(timestamp), "\n")
     files.for.timestamp <- get.stat.files.for.timestamp(directory, timestamp)
-    cpu.stat.file <- get.cpu.stat.file(paste(directory, "/", files.for.timestamp, sep=""))
-    #     cat("DEBUG: files.for.timestamp = ", files.for.timestamp," cpu.stat.file = ", cpu.stat.file, "\n")
-    cpu.ticks.for.timestamp <- parse.cpu.stat.file(cpu.stat.file)
-    cpu.ticks <- aggregate.cpu.ticks(cpu.ticks, timestamp, cpu.ticks.previous, cpu.ticks.for.timestamp)
-    cpu.ticks.previous <- cpu.ticks.for.timestamp
-    
-    proc.stat.files <- get.proc.stat.files(files.for.timestamp)
-    if(length(proc.stat.files) > 0) { 
-      #     cat("DEBUG: files.for.timestamp = ", files.for.timestamp," proc.stat.files = ", proc.stat.files, "\n")
-      proc.ticks.for.timestamp <- parse.proc.stat.files(paste(directory, "/", proc.stat.files, sep=""))
-      proc.ticks <- aggregate.proc.ticks(proc.ticks, timestamp, 
-                                         proc.ticks.previous, proc.ticks.for.timestamp)
-      proc.ticks.previous <- proc.ticks.for.timestamp
-    } else {
-      proc.ticks <- aggregate.proc.ticks(proc.ticks, timestamp, 
-                                         proc.ticks.previous, data.frame(pid = NA, ticks = NA))
-      proc.ticks.previous <- data.frame(pid = NA, ticks = NA)
+    if(length(files.for.timestamp) > 0) {
+      cpu.stat.file <- get.cpu.stat.file(paste(directory, "/", files.for.timestamp, sep=""))
+      #     cat("DEBUG: files.for.timestamp = ", files.for.timestamp," cpu.stat.file = ", cpu.stat.file, "\n")
+      cpu.ticks.for.timestamp <- parse.cpu.stat.file(cpu.stat.file)
+      cpu.ticks <- aggregate.cpu.ticks(cpu.ticks, timestamp, cpu.ticks.previous, cpu.ticks.for.timestamp)
+      cpu.ticks.previous <- cpu.ticks.for.timestamp
+      
+      proc.stat.files <- get.proc.stat.files(files.for.timestamp)
+      if(length(proc.stat.files) > 0) { 
+        #     cat("DEBUG: files.for.timestamp = ", files.for.timestamp," proc.stat.files = ", proc.stat.files, "\n")
+        proc.ticks.for.timestamp <- parse.proc.stat.files(paste(directory, "/", proc.stat.files, sep=""))
+        proc.ticks <- aggregate.proc.ticks(proc.ticks, timestamp, 
+                                           proc.ticks.previous, proc.ticks.for.timestamp)
+        proc.ticks.previous <- proc.ticks.for.timestamp
+      } else {
+        proc.ticks <- aggregate.proc.ticks(proc.ticks, timestamp, 
+                                           proc.ticks.previous, data.frame(pid = NA, ticks = NA))
+        proc.ticks.previous <- data.frame(pid = NA, ticks = NA)
+      }
     }
   }
   
