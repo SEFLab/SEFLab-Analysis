@@ -32,4 +32,4 @@ This package defines several data sources that encapsulate all the data
 processing activities needed to read data files and produce time-aligned and
 consolidated data tables.
 
-For more information see the documentation of the R package.
+...
