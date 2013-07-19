@@ -121,16 +121,6 @@ test.get.proc.stat.files <- function() {
                               "20130618_100753_10645_10577_cron_stat"))
 }
 
-test.get.main.proc.pid.from.proc.files<- function() {
-  tmp.dir <- setup.tmp.dir.with.stat.files()
-  files <- get.proc.stat.files(get.stat.files.for.timestamp(tmp.dir, as.POSIXct("2013/06/18 10:07:53")))
-  
-  pid <- get.main.proc.pid.from.proc.files(files)
-  remove.tmp.dir(tmp.dir)
-  
-  checkEquals(pid, "10577")
-}
-
 test.parse.cpu.stat.file <- function() {
   file.contents <- data.frame(file = "20130618_100753_stat", 
                               contents = "cpu  38161736 13315 37694797 846498666 54217887 9747 3472885 0 0\nsome other conntents")

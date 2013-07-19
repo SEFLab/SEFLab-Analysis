@@ -1,4 +1,4 @@
-Package: seflab.tools.analyses
+Package: seflab.tools.analysis
 Type: Package
 Title: Toolkit for analysing experimental data generated in the SEFLab
 Version: 1.1
