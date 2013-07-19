@@ -66,8 +66,8 @@ linuxproc.data.source <- function(directory) {
   proc.utilization <- calculate.proc.utilization(combined.ticks)
   cat("Process utilizations calulated\n", sep="")
   
-  cat("Aggregating sub-process utlizations to main process...\n")
-  aggregated.proc.utilizations <- aggregate.proc.utilizations.to.main.processes(proc.utilization)
+  cat("Aggregating sub-process utlizations...\n")
+  aggregated.proc.utilizations <- aggregate.proc.utilizations(proc.utilization)
   
   new(.linuxproc.data.source.class.name, 
       file = directory, 
@@ -77,7 +77,7 @@ linuxproc.data.source <- function(directory) {
       combined.ticks = combined.ticks,
       cpu.utilization = cpu.utilization,
       proc.utilization = proc.utilization,
-      aggregated.proc.utilization = aggregated.proc.utilization)
+      aggregated.proc.utilization = aggregated.proc.utilizations)
 }
 
 setMethod(
