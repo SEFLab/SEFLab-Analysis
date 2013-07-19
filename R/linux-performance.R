@@ -60,9 +60,11 @@ parse.proc.stat.files <- function(files) {
   pid <- c()
   for(file in files) {
     #     cat("DEBUG: calculate.proc.ticks timastamp = ", timestamp, " file = ", file, "\n")
-    file.data <- read.csv(file=file, sep=" ", header=FALSE)
-    pid <- c(pid, file.data[, 1])
-    ticks <- c(ticks, sum(file.data[, 14], file.data[, 15]))
+    if(file.info(file)$size > 0) {
+      file.data <- read.csv(file=file, sep=" ", header=FALSE)
+      pid <- c(pid, file.data[, 1])
+      ticks <- c(ticks, sum(file.data[, 14], file.data[, 15]))
+    }
   }
   
   return(data.frame(pid = pid, ticks = ticks))
